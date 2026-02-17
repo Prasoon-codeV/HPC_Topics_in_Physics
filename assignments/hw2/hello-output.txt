@@ -1,11 +1,11 @@
 Hello from Ganymede2 HPC cluster!
-[prun] Master compute host = c-10-05
+[prun] Master compute host = c-01-05
 [prun] Resource manager = slurm
 [prun] Launch cmd = mpirun python plot.py (family=openmpi4)
 Traceback (most recent call last):
-  File "/home/pxv220016/hpc_course/HPC_Topics_in_Physics/assignments/hw2/plot.py", line 13, in <module>
-    data1 = pd.read_csv(file_name_1, delim_whitespace=True, skiprows=1, names=['z', 'x_HI', 'x_HeI', 'x_HeII'])
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pxv220016/hpc_course/HPC_Topics_in_Physics/assignments/hw2/plot.py", line 17, in <module>
+    data2 = pd.read_csv(file_name_2, delim_whitespace=True, skiprows=1, names=['z', 'sfrd'])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: read_csv() got an unexpected keyword argument 'delim_whitespace'
 --------------------------------------------------------------------------
 Primary job  terminated normally, but 1 process returned
@@ -15,6 +15,6 @@ a non-zero exit code. Per user-direction, the job has been aborted.
 mpirun detected that one or more processes exited with non-zero status, thus causing
 the job to be terminated. The first process to do so was:
 
-  Process name: [[18376,1],0]
+  Process name: [[30788,1],0]
   Exit code:    1
 --------------------------------------------------------------------------
