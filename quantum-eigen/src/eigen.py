@@ -2,7 +2,6 @@ import numpy as np
 from scipy.linalg import eigh
 import argparse
 
-
 def build_2d_hamiltonian(N=20, potential='well'):
     """
     Build a discretized 2D Hamiltonian on an N x N grid.
@@ -20,7 +19,6 @@ def build_2d_hamiltonian(N=20, potential='well'):
     dx = 1. / float(N) # grid spacing, can be arbitrary
     inv_dx2 = float(N * N) # 1/dx^2
     H = np.zeros((N*N, N*N), dtype=np.float64)
-    
     # Helper function to map (i,j) -> linear index
     def idx(i, j):
         return i * N + j
@@ -56,8 +54,7 @@ def build_2d_hamiltonian(N=20, potential='well'):
                 H[row, idx(i, j-1)] = inv_dx2
             if j < N-1: # right
                 H[row, idx(i, j+1)] = inv_dx2
-    return H
-
+        return H
 
 
 def solve_eigen(N=20, potential='well', n_eigs=None):
@@ -79,41 +76,34 @@ def solve_eigen(N=20, potential='well', n_eigs=None):
     The corresponding eigenvectors.
     """
     H = build_2d_hamiltonian(N, potential)
-
     # Solve entire spectrum (careful for large N)
     vals, vecs = eigh(H)
-
     # Sort
     idx_sorted = np.argsort(vals)
     vals_sorted = vals[idx_sorted]
     vecs_sorted = vecs[:, idx_sorted]
-
+    
     if n_eigs is None:
         return vals_sorted, vecs_sorted
     else:
         return vals_sorted[:n_eigs], vecs_sorted[:, :n_eigs]
-    
+
 if __name__ == '__main__':
-    
-    parser = argparse.ArgumentParser(description='Input N, potential type and number of eigenvalues:\n')
-    
-    parser.add_argument('N', type=int)
-    parser.add_argument('potential', type=str)
-    parser.add_argument('n_eigs', type=int)
+    parser = argparse.ArgumentParser(description='Input N, potential type and number of eigenvalues to compute:\n')
+    parser.add_argument('--N', type=int, default=20)
+    parser.add_argument('--potential', type=str, default='well')
+    parser.add_argument('--n_eigs', type=int, default=5)
     
     args = parser.parse_args()
-    
     N = args.N
     potential = args.potential
-    N_eigens = args.n_eigs
-    
-    if N_eigens > N*N:
-        print("Warning: n_eigs should not be more than N^2)")
-        print("Setting default n_eigs = N^2")
-        N_eigens = N*N
-    
-    # Example local test
-    vals, vecs = solve_eigen(N=N, potential=potential, n_eigs=N_eigens)
-    print("Lowest", N_eigens, "eigenvalues:", vals)
+    n_eigs = args.n_eigs
 
+    if n_eigs > args.N**2:
+        print(f"Warning: n_eigs={args.n_eigs} exceeds total number of eigenvalues {args.N**2}. Returning all eigenvalues.")
+        args.n_eigs = None
+
+    # Example local test
+    vals, vecs = solve_eigen(N, potential, n_eigs)
+    print("Lowest 5 eigenvalues:", vals)
 
