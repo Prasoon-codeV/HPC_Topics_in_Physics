@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# data files
+*.h5
+*.nc
+*.dat
+
+
+# output files
+*quantum-eigen/outputs/
+*quantum-eigen/hello-output.txt
+*quantum-eigen/job.slurm
+
