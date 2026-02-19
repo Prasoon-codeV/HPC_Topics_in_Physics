@@ -2,14 +2,15 @@ import numpy as np
 from scipy.linalg import eigh
 import argparse
 
+VALID_POTENTIALS = ['well', 'harmonic']
 def build_2d_hamiltonian(N=20, potential='well'):
     """
     Build a discretized 2D Hamiltonian on an N x N grid.
     Parameters
     ----------
     N : int
-    Number of points in each dimension (N^2 total points).
     potential : str
+    Number of points in each dimension (N^2 total points).
     Choose the potential. 'well' or 'harmonic' examples.
     Returns
     -------
@@ -22,14 +23,12 @@ def build_2d_hamiltonian(N=20, potential='well'):
     # Helper function to map (i,j) -> linear index
     def idx(i, j):
         return i * N + j
-    
-    # Potential function
+        # Potential function
     def V(i, j):
         # Example 1: infinite square well -> zero in interior, large outside
         if potential == 'well':
             # No boundary enforcement here, but can skip boundary wavefunction
             return 0.
-        
         # Example 2: 2D harmonic oscillator around center
         elif potential == 'harmonic':
             x = (i - N/2) * dx
@@ -38,13 +37,12 @@ def build_2d_hamiltonian(N=20, potential='well'):
             return 4. * (x**2 + y**2)
         else:
             return 0.
-    
     # Build the matrix: For each (i, j), set diagonal for 2D Laplacian plus V
     for i in range(N):
         for j in range(N):
             row = idx(i,j)
             # Potential
-            H[row, row] = -4. * inv_dx2 + V(i,j) # "Kinetic" ~ -4/dx^2 in 2D FD
+            H[row, row] = 4. * inv_dx2 + V(i,j) # "Kinetic" ~ -4/dx^2 in 2D FD
             # Neighbors (assuming no boundary conditions or Dirichlet)
             if i > 0: # up
                 H[row, idx(i-1, j)] = inv_dx2
@@ -54,56 +52,43 @@ def build_2d_hamiltonian(N=20, potential='well'):
                 H[row, idx(i, j-1)] = inv_dx2
             if j < N-1: # right
                 H[row, idx(i, j+1)] = inv_dx2
-        return H
+    return H
 
-
-def solve_eigen(N=20, potential='well', n_eigs=None):
-    """
-    Build a 2D Hamiltonian and solve for the lowest n_eigs eigenvalues.
-    Parameters
-    ----------
-    N : int
-    Grid points in each dimension.
-    potential : str
-    Potential type.
-    n_eigs : int
-    Number of eigenvalues to return.
-    Returns
-    -------
-    vals : array_like
-    The lowest n_eigs eigenvalues sorted ascending.
-    vecs : array_like
-    The corresponding eigenvectors.
-    """
+def solve_eigen(N=20, potential='well', n_eigs=None):   
     H = build_2d_hamiltonian(N, potential)
+
     # Solve entire spectrum (careful for large N)
     vals, vecs = eigh(H)
     # Sort
     idx_sorted = np.argsort(vals)
     vals_sorted = vals[idx_sorted]
     vecs_sorted = vecs[:, idx_sorted]
-    
     if n_eigs is None:
         return vals_sorted, vecs_sorted
     else:
         return vals_sorted[:n_eigs], vecs_sorted[:, :n_eigs]
 
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Input N, potential type and number of eigenvalues to compute:\n')
-    parser.add_argument('--N', type=int, default=20)
-    parser.add_argument('--potential', type=str, default='well')
-    parser.add_argument('--n_eigs', type=int, default=5)
-    
-    args = parser.parse_args()
-    N = args.N
-    potential = args.potential
-    n_eigs = args.n_eigs
-
-    if n_eigs > args.N**2:
-        print(f"Warning: n_eigs={args.n_eigs} exceeds total number of eigenvalues {args.N**2}. Returning all eigenvalues.")
-        args.n_eigs = None
-
     # Example local test
-    vals, vecs = solve_eigen(N, potential, n_eigs)
-    print("Lowest 5 eigenvalues:", vals)
+
+    parser = argparse.ArgumentParser(description="Solve 2D Hamiltonian eigenvalue problem.")
+    
+    parser.add_argument('--N', type=int, required=True)
+    parser.add_argument('--potential', choices=VALID_POTENTIALS, required=True)
+    parser.add_argument('--n-eigs', type=int, required=True)
+    args = parser.parse_args()
+    
+    n_eigs = args.n_eigs
+    
+    if n_eigs > args.N * args.N:
+        print(f"Warning: Requested n_eigs={n_eigs} exceeds total number of states N^2={args.N * args.N}. Setting n_eigs to {args.N * args.N}.")
+        n_eigs = args.N * args.N
+        
+    vals, vecs = solve_eigen(N=args.N, potential=args.potential, n_eigs=n_eigs)
+    print(f"Data saved in eigen_N{args.N}_{args.potential}.txt, {n_eigs} eigenvalues:\n", vals)
+    np.savetxt(f'eigs_N{args.N}_{args.potential}.txt', vals)
+    
+    
+
 
