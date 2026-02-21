@@ -9,7 +9,7 @@ __pycache__/
 
 
 # output files
-*quantum-eigen/outputs/
-*quantum-eigen/hello-output.txt
-*quantum-eigen/job.slurm
+quantum-eigen/outputs/
+quantum-eigen/hello-output.txt
+quantum-eigen/job.slurm
 
