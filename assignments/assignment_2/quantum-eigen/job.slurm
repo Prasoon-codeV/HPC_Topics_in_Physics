@@ -20,7 +20,7 @@ set -euo pipefail
 
 # Sweep values
 Ns=(10 20 40 80 160 320)
-potentials=(well harmonic)
+potentials=(shell_oscillator well harmonic)
 
 nN=${#Ns[@]}
 np=${#potentials[@]}
