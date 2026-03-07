@@ -12,4 +12,5 @@ __pycache__/
 quantum-eigen/outputs/
 quantum-eigen/hello-output.txt
 quantum-eigen/job.slurm
-
+assignments/assignment_2/quantum-eigen/outputs/
+assignments/assignment_4/src/outputs/
