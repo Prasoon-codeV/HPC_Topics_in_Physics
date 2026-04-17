@@ -1,0 +1,4 @@
+Method,Convergence Order,Notes
+euler,1.0055612799361549,"expected: 1,2,4"
+rk2,2.00992166557264,"expected: 1,2,4"
+rk4,4.058714511653797,"expected: 1,2,4"

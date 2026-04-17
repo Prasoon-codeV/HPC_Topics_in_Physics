@@ -1,0 +1,14 @@
+
+=== Explicit instability demo ===
+
+=== L-stability comparison ===
+
+=== GPU Benchmark (TRBDF2) ===
+CPU time: 4.1977
+GPU time: 0.2348
+Speedup: 17.88
+
+=== Summary Table ===
+   Method     Stability  Accuracy                                     Notes
+0      TR  Not L-stable  Moderate               Poor damping of stiff modes
+1  TRBDF2      L-stable      High  Strong damping, better for stiff systems

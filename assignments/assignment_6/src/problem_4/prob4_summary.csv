@@ -1,0 +1,3 @@
+Method,Stability,Accuracy,Notes
+TR,Not L-stable,Moderate,Poor damping of stiff modes
+TRBDF2,L-stable,High,"Strong damping, better for stiff systems"

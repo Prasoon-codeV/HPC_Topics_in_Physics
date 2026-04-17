@@ -1,0 +1,26 @@
+
+===== CPU RUN =====
+
+=== Validation (CPU vs GPU) ===
+Match: True
+
+=== Convergence Study ===
+
+=== Problem 3: GPU Batch Benchmark ===
+
+Running N = 1000
+
+Running N = 10000
+
+Running N = 100000
+
+Running N = 1000000
+
+Results:
+         N  log10(N)  CPU Time (s)  ...    Speedup  CPU Throughput  GPU Throughput
+0     1000       3.0      0.256316  ...   0.101932    3.901433e+07    3.976823e+06
+1    10000       4.0      0.860736  ...   0.345310    1.161796e+08    4.011796e+07
+2   100000       5.0      7.520363  ...   3.081472    1.329723e+08    4.097505e+08
+3  1000000       6.0    114.639781  ...  24.227584    8.722975e+07    2.113366e+09
+
+[4 rows x 7 columns]
