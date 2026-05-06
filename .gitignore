@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.pyc
+project_1/.DS_Store
 
 # data files
 *.h5
@@ -14,3 +15,7 @@ quantum-eigen/hello-output.txt
 quantum-eigen/job.slurm
 assignments/assignment_2/quantum-eigen/outputs/
 assignments/assignment_4/src/outputs/
+
+# project related files
+project_1/data/
+project_1/lisn_tec.py
